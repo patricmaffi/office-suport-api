@@ -1,0 +1,3 @@
+[submodule "hooks"]
+	path = hooks
+	url = git@bitbucket.org:pmf/git-flow-hooks.git

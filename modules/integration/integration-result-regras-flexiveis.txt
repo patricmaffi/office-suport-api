@@ -1,0 +1,206 @@
+db.getCollection("actions")
+.findAndModify({query:{_id:ObjectId("61b21437c3d4c7e07961ad9c")}, 
+    update:{$set:{
+	"_id" : ObjectId("61b21437c3d4c7e07961ad9c"),
+	"name" : "check-integration-result-filter-form",
+	"description" : "Valida os campos do filtro para busca dos resultados do integration result",
+	"type" : "validationFunction",
+	"code" : "function({contextData}) {\n    let orderPackageId = contextData.orderPackageId;\n    let start = contextData.start;\n    let end = contextData.end;\n    \n    if (!orderPackageId && (!start || !end ) ) {\n        return [\"Preencha o OrderPackageId ou datas de referência\"];\n    }\n    if (orderPackageId && orderPackageId.length != 36) {\n        return [\"OrderPackageID incorreto\"];\n    }\n    return [];\n}",
+	"args" : {
+		"contextData" : "this.data"
+	},
+	"createdAt" : ISODate("2021-12-09T12:10:35.743-03:00"),
+	"updatedAt" : ISODate("2021-12-09T12:10:35.743-03:00")
+}},
+    upsert:true});
+
+db.getCollection("actions")
+.findAndModify({query:{_id:ObjectId("61b0e58f55e765c557d1ef1a")}, 
+    update:{$set:{
+	"_id" : ObjectId("61b0e58f55e765c557d1ef1a"),
+	"name" : "validate-integration-result-filter",
+	"description" : "Confere os parametros do filtro e monta a url do endpoint",
+	"type" : "function",
+	"code" : "function ({ orderPackageId, start, end }) {\n  if(orderPackageId){\n\treturn '/integration/results/' + orderPackageId;\n  }\n  return '/integration/errorsByPeriod/' + start + '/' + end;\n}",
+	"args" : {
+		"orderPackageId" : "this.data.orderPackageId",
+		"start" : "this.data.start.substring(0,10)",
+		"end" : "this.data.end.substring(0,10)"
+	},
+	"response" : {
+		"filterUrl" : "this"
+	},
+	"createdAt" : ISODate("2021-11-01T16:41:57.292-03:00"),
+	"updatedAt" : ISODate("2021-11-01T16:41:57.292-03:00")
+}},
+    upsert:true});
+
+db.getCollection("actions")
+.findAndModify({query:{_id:ObjectId("61a50fa1f6802b4ddeee889b")}, 
+    update:{$set:{
+	"_id" : ObjectId("61a50fa1f6802b4ddeee889b"),
+	"createdAt" : ISODate("2021-11-24T14:03:39.628-03:00"),
+	"description" : "Obtém os dados do Integration Result por um período de data",
+	"headers" : {
+		"Content-Type" : "application/json",
+		"Origin" : "https://www..com.br",
+		"User-Agent" : "ApiServiceOperation/1.0"
+	},
+	"method" : "GET",
+	"name" : "get-order-package-integration-results-by-period",
+	"response" : {
+		"dataTable" : "this.body.map((b) => ({ ...b, collapse: JSON.stringify(b.details, null, 2), createdAt: b.createdAt.substring(0,10) }))"
+	},
+	"type" : "httpRequest",
+	"url" : "${this.env.officeServiceUrl}${this.data.filterUrl}"
+}},
+    upsert:true});
+
+db.getCollection("schemas")
+.findAndModify({query:{_id:ObjectId("619fcf3817ee07003d01a479")}, 
+    update:{$set:{
+	"_id" : ObjectId("619fcf3817ee07003d01a479"),
+	"name" : "Filtro Integration Result",
+	"schema" : "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema\",\n  \"type\": \"object\",\n  \"version\": \"2\",\n  \"title\": \"Filtro Integration Result\",\n  \"required\": [],\n  \"additionalProperties\": true,\n  \"properties\": {\n    \"orderPackageId\": {\n      \"type\": \"string\",\n      \"component\": {\n        \"props\": {\n          \"label\": \"Order Package Id\",\n          \"placeholder\": \"OP ID\"\n        },\n        \"name\": \"Input\",\n        \"column\": {\n          \"class\": \" col-xs-12 col-sm-12 col-md-12 col-lg-12\"\n        }\n      }\n    },\n    \"start\": {\n      \"type\": \"string\",\n      \"component\": {\n        \"props\": {\n          \"placeholder\": \"__/__/____\",\n          \"label\": \"Início\"\n        },\n        \"name\": \"InputDate\",\n        \"column\": {\n          \"class\": \" col-xs-6 col-sm-6 col-md-6 col-lg-6\"\n        }\n      }\n    },\n    \"end\": {\n      \"type\": \"string\",\n      \"component\": {\n        \"props\": {\n          \"placeholder\": \"__/__/____\",\n          \"label\": \"Fim\"\n        },\n        \"name\": \"InputDate\",\n        \"column\": {\n          \"class\": \" col-xs-6 col-sm-6 col-md-6 col-lg-6\"\n        }\n      }\n    }\n  }\n}",
+	"createdAt" : ISODate("2021-11-25T15:00:24.177-03:00"),
+	"updatedAt" : ISODate("2021-11-29T16:17:43.841-03:00")
+}},
+    upsert:true});
+
+db.getCollection("schemas")
+.findAndModify({query:{_id:ObjectId("619e7463f6802b4ddeee8898")}, 
+    update:{$set:{
+    "_id" : ObjectId("619e7463f6802b4ddeee8898"),
+    "name" : "integration-result-table-component",
+    "schema" : "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema\",\n  \"type\": \"object\",\n  \"version\": \"2\",\n  \"title\": \"integration-result-table-component\",\n  \"required\": [],\n  \"additionalProperties\": true,\n  \"properties\": {\n    \"info\": {\n      \"type\": \"string\",\n      \"readOnly\": true,\n      \"component\": {\n        \"props\": {\n          \"children\": \"<p>MESG DEFAULT</p>\"\n        },\n        \"name\": \"RawHtml\",\n        \"column\": {\n          \"class\": \" col-xs-12 col-sm-12 col-md-12 col-lg-12\"\n        }\n      }\n    },\n    \"dataTable\": {\n      \"type\": \"object\",\n      \"readOnly\": true,\n      \"component\": {\n        \"name\": \"DataTable\",\n        \"renderInRoot\": true,\n        \"props\": {\n            \"items\": [],\n          \"headers\": [\n            {\n              \"value\": \"id\",\n              \"show\": false\n            },\n            {\n              \"text\": \"Order Package Id\",\n              \"value\": \"orderPackageId\"\n            },\n            {\n              \"text\": \"OP-Version\",\n              \"value\": \"orderPackageVersion\"\n            },\n            {\n              \"text\": \"CorrelationId\",\n              \"value\": \"eventCorrelationId\"\n            },\n            {\n              \"text\": \"Provider\",\n              \"value\": \"provider\"\n            },\n            {\n              \"text\": \"FailCode\",\n              \"value\": \"failCode\"\n            },\n            {\n              \"text\": \"Created Date\",\n              \"value\": \"createdAt\"\n            },\n            {\n              \"text\": \"Attempts\",\n              \"value\": \"attempts\"\n            },\n            {\n              \"text\": \"Result\",\n              \"value\": \"result\"\n            }\n          ],\n          \"itemKey\": \"id\"\n        }\n      }\n    }\n  }\n}",
+    "createdAt" : ISODate("2021-09-30T13:56:50.851-03:00"),
+    "updatedAt" : ISODate("2021-09-30T13:56:50.851-03:00")
+ }},
+    upsert:true});
+	
+db.getCollection("steps")
+.findAndModify({query:{_id:ObjectId("619e6c27f6802b4ddeee8896")}, 
+    update:{$set:{
+	"_id" : ObjectId("619e6c27f6802b4ddeee8896"),
+	"data" : {
+		
+	},
+	"schemaId" : ObjectId("619fcf3817ee07003d01a479"),
+	"excludeViewState" : [ ],
+	"actionsIds" : [ ],
+	"title" : "Filtro busca integration result",
+	"metadata" : {
+		
+	},
+	"createdAt" : ISODate("2021-11-24T09:32:40.852-03:00"),
+	"updatedAt" : ISODate("2021-11-24T09:32:40.852-03:00")
+}},
+    upsert:true});
+
+db.getCollection("steps")
+.findAndModify({query:{_id:ObjectId("619e6e37f6802b4ddeee8897")}, 
+    update:{$set:{
+	"_id" : ObjectId("619e6e37f6802b4ddeee8897"),
+	"data" : {
+		"info" : "<p>Lista Informações Integration Result. o/ </p>",
+		"dataTable" : [
+			{
+				"id" : "1",
+				"orderPackageId" : "1",
+				"orderPackageVersion" : 0,
+				"eventCorrelationId" : "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+				"provider" : "latam",
+				"result" : "FAIL",
+				"failCode" : "500",
+				"details" : {
+					"erro1" : "message 1",
+					"erro2" : "message 2",
+					"erro3" : "message 3"
+				},
+				"createdAt" : "2021-11-18T18:28:44"
+			},
+			{
+				"id" : "2",
+				"orderPackageId" : "2",
+				"orderPackageVersion" : 0,
+				"eventCorrelationId" : "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+				"provider" : "latam",
+				"result" : "FAIL",
+				"failCode" : "500",
+				"details" : {
+					"erro1" : "message 1",
+					"erro2" : "message 2",
+					"erro3" : "message 3"
+				},
+				"createdAt" : "2021-11-18T18:28:44"
+			}
+		]
+	},
+	"schemaId" : [
+		{
+			"id" : ObjectId("619e7463f6802b4ddeee8898"),
+			"filter" : "this.vars.type === 'simples'"
+		}
+	],
+	"excludeViewState" : [ ],
+	"actionsIds" : [
+		ObjectId("61b21437c3d4c7e07961ad9c"),
+		ObjectId("61b0e58f55e765c557d1ef1a"),
+		ObjectId("61a50fa1f6802b4ddeee889b")
+	],
+	"title" : "Teste do componente tabela Integration Result",
+	"metadata" : {
+		
+	},
+	"createdAt" : ISODate("2021-09-30T13:53:59.045-03:00"),
+	"updatedAt" : ISODate("2021-09-30T13:53:59.045-03:00")
+}},
+    upsert:true});
+
+db.getCollection("rules")
+.findAndModify({query:{_id:ObjectId("619e3109f6802b4ddeee8895")}, 
+    update:{$set:{
+	"_id" : ObjectId("619e3109f6802b4ddeee8895"),
+	"name" : "Resultado Integrações Order Package",
+	"filter" : "true",
+	"createdAt" : ISODate("2021-11-24T09:32:40.852-03:00"),
+	"updatedAt" : ISODate("2021-11-24T09:32:40.852-03:00"),
+	"vars" : {
+		"type" : "simples"
+	},
+	"stepsIds" : [
+		ObjectId("619e6c27f6802b4ddeee8896"),
+		ObjectId("619e6e37f6802b4ddeee8897")
+	],
+	"description" : "Tabela para exibir os resultados de Integração do Order Package"
+}},
+    upsert:true});
+	
+db.getCollection("contexts")
+.findAndModify({query:{_id:ObjectId("61854265274ff5003f8eb590")}, 
+    update:{$set:{
+	"_id" : ObjectId("61854265274ff5003f8eb590"),
+	"name" : "order-package-integration-result",
+	"actions" : [ ],
+	"data" : {
+		"test" : "table"
+	},
+	"createdAt" : ISODate("2021-11-05T11:40:37.185-03:00"),
+	"updatedAt" : ISODate("2021-11-05T11:40:37.185-03:00")
+}},
+    upsert:true});
+	
+db.getCollection("categories")
+.findAndModify({query:{_id:ObjectId("618542a9274ff5003f8eb591")}, 
+    update:{$set:{
+	"_id" : ObjectId("618542a9274ff5003f8eb591"),
+	"name" : "integration-result",
+	"description" : "tabela para listar resultados integração Order Package",
+	"contextId" : ObjectId("61854265274ff5003f8eb590"),
+	"rulesIds" : [
+		ObjectId("619e3109f6802b4ddeee8895")
+	],
+	"createdAt" : ISODate("2021-11-05T11:41:45.284-03:00"),
+	"updatedAt" : ISODate("2021-11-05T11:42:22.890-03:00")
+}},
+    upsert:true});

@@ -1,0 +1,165 @@
+{
+  "orderPackageCode": "ORDERPACKAGE-001",
+  "metadata": {
+    "foo": "bar",
+    "john": "doe"
+  },
+  "orders": [
+    {
+      "orderId": "SALE-001",
+      "customer": {
+        "email": "john@doe.com",
+        "name": "John Doe",
+        "phone": "5531999380586",
+        "metadata": {
+          "idusers": "XPTO"
+        }
+      },
+      "merchant": {
+        "email": "@.com",
+        "name": ""
+      },
+      "items": [
+        {
+          "name": "LATAM-MILES-GRU-CNF",
+          "total": 10020,
+          "adjustments": [
+            {
+              "type": "COUPON",
+              "total": -2000,
+              "metadata": {
+                "idcoupon": "XPTO"
+              }
+            }
+          ],
+          "metadata": {
+            "flightId": "XPTO",
+            "idtransactions": "1"
+          }
+        }
+      ],
+      "metadata": {
+        "idorder": "XPTO",
+        "idsales": "XPTO"
+      },
+      "transactions": [
+        {
+          "buyer": {
+            "email": "john@doe_father.com",
+            "name": "John Doe Father"
+          },
+          "paymentMethod": {
+            "type": "CREDIT_CARD",
+            "holderName": "John Doe Father",
+            "installments": 1,
+            "brand": "VISA",
+            "gateway": "pagarme",
+            "document": {
+              "document": "11111111111",
+              "type": "CPF"
+            }
+          },
+          "seller": {
+            "email": "@.com.br",
+            "name": ""
+          },
+          "total": 10000,
+          "metadata": {
+            "idmaxpay": "XPTO"
+          }
+        }
+      ],
+      "type": "SALE"
+    },
+    {
+      "orderId": "PURCHASE-001",
+      "customer": {
+        "email": "@.com",
+        "name": ""
+      },
+      "merchant": {
+        "email": "miles@offerer.com",
+        "name": "Miles Offerer",
+        "phone": "5531111111111",
+        "metadata": {
+          "idusers": "XPTO"
+        }
+      },
+      "items": [
+        {
+          "name": "10000-MILES-LATAM",
+          "total": 10020,
+          "metadata": {
+            "idsales": "XPTO"
+          }
+        }
+      ],
+      "metadata": {
+        "idoutgoing": "XPTO"
+      },
+      "transactions": [
+        {
+          "buyer": {
+            "email": "@.com.br",
+            "name": ""
+          },
+          "paymentMethod": {
+            "type": "TRANSFER",
+            "gateway": "paymee",
+            "document": {
+              "type": "RG",
+              "document": "MG12421811"
+            }
+          },
+          "seller": {
+            "email": "miles@offerer.com",
+            "name": "Miles Offerer"
+          },
+          "total": 10000,
+          "metadata": {
+            "idmaxpay": "XPTO"
+          }
+        }
+      ],
+      "type": "PURCHASE"
+    },
+    {
+      "orderId": "PURCHASE-002",
+      "customer": {
+        "email": "@.com",
+        "name": ""
+      },
+      "merchant": {
+        "email": "latam@airlines.com",
+        "name": "Airline Latam"
+      },
+      "items": [
+        {
+          "name": "FEE_DEPARTURE",
+          "total": 10020
+        }
+      ],
+      "transactions": [
+        {
+          "buyer": {
+            "email": "@.com.br",
+            "name": ""
+          },
+          "paymentMethod": {
+            "type": "CREDIT_CARD",
+            "installments": 1,
+            "holderName": "Employee",
+            "brand": "VISA",
+            "gateway": "pagarme"
+          },
+          "seller": {
+            "email": "latam@airline.com",
+            "name": "Latam Airline"
+          },
+          "total": 10000
+        }
+      ],
+      "type": "PURCHASE"
+    }
+  ]
+}

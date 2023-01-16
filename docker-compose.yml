@@ -1,0 +1,30 @@
+version: '3.3'
+services:
+  mysql:
+    image: mysql:5.7
+    container_name: office-service-mysql
+    restart: always
+    platform: linux/x86_64
+    environment:
+      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_DATABASE: 'office_service'
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    volumes:
+      - my-db:/var/lib/mysql
+  docs:
+    container_name: office-service-docs
+    build:
+      context: ./docs
+    volumes:
+      - ./docs:/home/docs
+    ports:
+      - '8000:8000'
+volumes:
+  my-db:
+networks:
+  default:
+    external:
+      name: office-service-network

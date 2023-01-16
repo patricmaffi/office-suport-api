@@ -1,0 +1,26 @@
+version: "3.3"
+services:
+  office:
+    image: patricmaffi/office-service:1.0.0-develop
+    container_name: office-service
+    restart: always
+    ports:
+      - "9000:9000"
+      - "8080:8080"
+    environment:
+      MYSQL_HOST: "mm-office-writer.rds.res.prv.hmg.pmf.com"
+      MYSQL_PORT: "3306"
+      MYSQL_USER: "office_user"
+      MYSQL_PASSWORD: "TK7DTLG2USB"
+      FINANCIAL_REQUEST_MYSQL_USER: "api_financial_request"
+      FINANCIAL_REQUEST_MYSQL_PASSWORD: "Nfbrz3av4vYTt"
+      ORDER_API_URL: "https://orders-hmg.pmf.com.br"
+      CANCEL_API_URL: "https://api-cancel-manager-hmg.pmf.com.br"
+      CANCEL_API_TOKEN: "Bearer eyJ0eXAiOiJKV1QiLvNQdgHDCnhZ47G-5EB0dtq3ZFE"
+      APPLICATION_ENV: "DEV"
+      KAFKA_BROKER: "b-2.message-bus.TRE596.c7.kafka.us-east-1.amazonaws.com:9094,b-1.message-bus.XMF596.c7.kafka.us-east-1.amazonaws.com:9094"
+    healthcheck:
+      test: nc -vz 127.0.0.1 8080
+      interval: 15s
+      timeout: 2s
+      retries: 4

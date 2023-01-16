@@ -1,0 +1,54 @@
+image: maven:3-jdk-11
+
+definitions:
+  caches:
+    sonar: ~/.sonar/cache  # Caching SonarCloud artifacts will speed up your build
+  steps:
+    - step: &build
+        name: Build
+        caches:
+          - maven
+          - sonar
+          - pip
+
+        script:
+          # Generate Enviroments Variables
+          - export AWS_ACCESS_KEY_ID=$HMG_AWS_ACCESS_KEY_ID
+          - export AWS_SECRET_ACCESS_KEY=$HMG_AWS_SECRET_ACCESS_KEY
+          - export AWS_DEFAULT_REGION=$HMG_AWS_DEFAULT_REGION
+          - export SONAR_CONTENT_AUTH_TOKEN=$SONAR_TOKEN
+
+          # Install cli aws
+          - apt-get update && apt-get install -y python3-pip
+          - pip3 install -U awscli
+
+          # Configure access aws cli
+          - aws configure set aws_access_key_id "${AWS_ACCESS_KEY_ID}"
+          - aws configure set aws_secret_access_key "${AWS_SECRET_ACCESS_KEY}"
+          - aws configure set region "${AWS_DEFAULT_REGION}"
+
+
+          # Build da aplicação
+          - mvn verify -s settings.xml --file pom.xml
+        artifacts:
+          - service/_swagger/*
+
+    - step: &todo
+        name: build-deploy
+        script:
+          # Generate Enviroments Variables
+          - echo "TODO"
+pipelines:
+  default:
+    - step: *build
+    - step:
+        name: 'Deploy swagger to s3'
+        script:
+          - pipe: atlassian/aws-s3-deploy:0.3.8
+            variables:
+              AWS_ACCESS_KEY_ID: $HMG_AWS_ACCESS_KEY_ID
+              AWS_SECRET_ACCESS_KEY: $HMG_AWS_SECRET_ACCESS_KEY
+              AWS_DEFAULT_REGION: 'us-east-1'
+              S3_BUCKET: 'office-service/swagger'
+              LOCAL_PATH: 'service/_swagger'
+              ACL: 'public-read'

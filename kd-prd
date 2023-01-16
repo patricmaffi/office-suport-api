@@ -1,0 +1,4 @@
+export KAFKA_PROPERTIES=$(cat kafka.properties | base64)
+export KAFKA_KEYSTORE=$(cat ./keystore/keystore.p12 | base64)
+export KAFKA_BROKERCONNECT="b-1.message-bus.otkkh2.c6.kafka.us-east-1.amazonaws.com:9094"
+docker-compose -f docker-compose-kafdrop-prd.yml up -d

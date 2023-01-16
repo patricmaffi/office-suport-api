@@ -1,0 +1,17 @@
+version: "3.3"
+services:
+  kafdrop:
+    image: obsidiandynamics/kafdrop
+    container_name: office-service-kafdrop
+    restart: "no"
+    ports:
+      - "9000:9000"
+    environment:
+      KAFKA_BROKERCONNECT: ${KAFKA_BROKERCONNECT}      
+      KAFKA_PROPERTIES: ${KAFKA_PROPERTIES}
+      KAFKA_KEYSTORE: ${KAFKA_KEYSTORE}
+      JVM_OPTS: "-Xms16M -Xmx48M -Xss180K -XX:-TieredCompilation -XX:+UseStringDeduplication -noverify"    
+networks:
+  default:
+    external:
+      name: office-service-network

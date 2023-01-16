@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <!-- Custom Style -->
+    <link rel="stylesheet" type="text/css" th:href="@{/main.css}">
+    <title>OrderPackage UI - [[${orderpackage.id}]]</title>
+</head>
+<body>
+<div class="my-5 page" size="A4">
+    <div class="p-5">
+        <section class="top-content bb d-flex justify-content-between">
+            <div class="top-left">
+                <div class="graphic-path">
+                    <p>OrderPackage</p>
+                </div>
+                <div class="position-relative">
+                    <p><span>[[${orderpackage.id}]]</span></p>
+                </div>
+            </div>
+        </section>
+        <th:block th:each="order : ${orderpackage.orders}">
+            <section class="store-user mt-5">
+                <div class="col-12">
+                    <div class="row bb pb-3">
+                        <div class="col-7">
+                            <p>Cliente</p>
+                            <h4>[[${order.customer.name}]]</h4>
+                        </div>
+                        <div class="col-5">
+                            <p>Comerciante</p>
+                            <h4>[[${order.merchant.name}]]</h4>
+                        </div>
+                    </div>
+                    <div class="row extra-info pt-3">
+                        <div class="col-7">
+                            <p>OrderId: <span>[[${order.id}]]</span></p>
+                        </div>
+                        <div class="col-5">
+                            <p>Data: <span th:text="${#temporals.format(order.createdAt, 'dd/MM/yyyy')}"></span></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="product-area mt-0">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <td>Código</td>
+                        <td>Quantidade</td>
+                        <td>Valor Unitário</td>
+                        <td>Total</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <th:block th:each="item : ${order.items}">
+                            <tr>
+                                <td>[[${item.name}]]</td>
+                                <td>[[${item.quantity}]]</td>
+                                <td>[[${item.priceUnit}]]</td>
+                                <td>[[${item.subTotal}]]</td>
+                            </tr>
+                        </th:block>
+                    </tbody>
+                </table>
+            </section>
+            <section class="balance-info">
+                <div class="row">
+                    <div class="col-8">
+                        <div th:each="transaction : ${order.transactions}">
+                            <table class="table border-0 table-hover">
+                                <tr>
+                                    <td>Forma de pagamento:</td>
+                                    <td>[[${transaction.paymentMethod.type}]]</td>
+                                </tr>
+                                <tr>
+                                    <td>Pagante:</td>
+                                    <td>[[${transaction.payer.name}]]</td>
+                                </tr>
+                                <tr>
+                                    <td>Recebedor:</td>
+                                    <td>[[${transaction.payee.name}]]</td>
+                                </tr>
+                                <tfoot>
+                                <tr>
+                                    <td>Total:</td>
+                                    <td>[[${transaction.total}]]</td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <table class="table border-0 table-hover">
+                            <tr>
+                                <td>Sub Total:</td>
+                                <td>[[${order.subTotal}]]</td>
+                            </tr>
+                            <tr>
+                                <td>Ajustes:</td>
+                                <td>[[${order.totalAdjustments}]]</td>
+                            </tr>
+                            <tfoot>
+                            <tr>
+                                <td>Total:</td>
+                                <td>[[${order.total}]]</td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </th:block>
+    </div>
+</div>
+</body>
+</html>
