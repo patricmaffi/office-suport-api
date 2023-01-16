@@ -16,7 +16,7 @@ services:
       FINANCIAL_REQUEST_MYSQL_PASSWORD: "Nfbrz3av4vYTt"
       ORDER_API_URL: "https://orders-hmg.pmf.com.br"
       CANCEL_API_URL: "https://api-cancel-manager-hmg.pmf.com.br"
-      CANCEL_API_TOKEN: "Bearer eyJ0eXAiOiJKV1QiLvNQdgHDCnhZ47G-5EB0dtq3ZFE"
+
       APPLICATION_ENV: "DEV"
       KAFKA_BROKER: "b-2.message-bus.TRE596.c7.kafka.us-east-1.amazonaws.com:9094,b-1.message-bus.XMF596.c7.kafka.us-east-1.amazonaws.com:9094"
     healthcheck:
